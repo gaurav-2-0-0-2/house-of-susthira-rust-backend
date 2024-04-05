@@ -1,16 +1,20 @@
 use axum::{
     routing::get,
+    //routing::post,
     Router,
 };
-
+mod routes;
+use routes::product::print_hello;
+use dotenv::dotenv;
 
 #[tokio::main]
 async fn main(){
 
+    dotenv().ok();
+
     let app = Router::new()
-        .route("/", get(|| async {"Hello World"}))
-        .route("/user", get(|| async {"These are all users"}));
-    let port = 3000;
+        .route("/products", get(print_hello()));
+    let port = std::env::var("PORT").expect("PORT must be set");
 
 
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}",port))
